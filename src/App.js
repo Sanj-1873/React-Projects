@@ -1,29 +1,22 @@
 
 import React, { Component } from 'react';
 import './App.css';
-import Person from './Person/Person.js'
+import Person from './Person/Person.js';
+/*import Radium, {StyleRoot}from 'radium';*/
+import styled from 'styled-components';
 
 class  App extends Component {
  
     state = {
       persons: [
-        { name:'Sanj', age: 20},
-        { name:'Jithin', age:21}
+        {id:'bleh0', name:'Sanj', age:20},
+        { id:'bleh1', name:'Jithin', age:21},
+        {id: 'bleh2', name:'Aditeya',age:19}
       ],
+      otherState:'some other value',
       showPersons:false
     }
   
-    
-  switchNameHandler = (newName) => {
-    //console.log('Was clicked')
-    // DON'T DO THIS : this.state.persons[0].name = "Sanjna";
-    this.setState({persons:
-    [
-      { name: newName, age: 20},
-      { name:'Jithin', age:21}
-    ]
-    })
-  }
 
   nameChangedHandler = (event,id) => {
     const personIndex = this.state.persons.findIndex(p => {
@@ -35,35 +28,43 @@ class  App extends Component {
     };
 
     person.name = event.target.value;
+    
     const persons = [...this.state.persons];
     persons[personIndex] = person;
 
-    this.setState({persons: persons})
+    this.setState({persons: persons});
   }
-
-
-  togglePersonHandler = () => {
-    const doesShow  = this.state.showPersons;
-    this.setState({showPersons: !doesShow})
-
-  }
-  deletePersonHandler = (personIndex) => {
+ deletePersonHandler = (personIndex) => {
     //const persons = this.state.persons.slice();
     const persons = [...this.state.persons];
     persons.splice(personIndex,1);
     this.setState({persons: persons});
+  }
+
+  togglePersonsHandler = () => {
+    const doesShow  = this.state.showPersons;
+    this.setState({showPersons: !doesShow});
 
   }
+ 
+
   render(){
     const style = {
       backgroundColor: 'green',
+      color:'white',
       font:'inherit',
       border:'1x solid blue',
-      padding: '8px'
+      padding: '8px',
+      cursor: 'pointer',
+      /*':hover': {
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }*/
     };
+
     let persons = null;
 
-    if (this.state.showPersons){
+    if (this.state.showPersons) {
         persons = (
           <div> 
           {this.state.persons.map((person, index) => {
@@ -78,23 +79,44 @@ class  App extends Component {
           
           </div>
 
-          )
+          );
+          style.backgroundColor = 'red';
+       /*   style[':hover'] = {
+            backgroundColor: 'salmon',
+            color:'black'
+          }*/ 
 
     }
+    const classes = [];
+    if(this.state.persons.length <= 2) {
+      classes.push('red');
+    }  
+    if(this.state.persons.length <=1) {
+      classes.push('bold');
+    }
+
+
     return (
-      <div className="App">
+    //<StyleRoot>
+      <div className="App" >
         <h1>Hi, I'm a React app</h1>
-        <button onClick={this.togglePersonHandler}>Switch Name</button>
+        <p className= {classes.join(' ')}> We have a para</p>
+        <button 
+        style={style}
+        onClick={this.togglePersonsHandler}>Switch Name</button>
         
            
       {persons}
         
      
       </div>
-      
-    /// React.createElement('div', {className: App}, React.createElement('h1',null,'I\'m a React App'))
+    //</StyleRoot>
     );
-  }
+
+
+    /// React.createElement('div', {className: App}, React.createElement('h1',null,'I\'m a React App'))
+      }
 }
 
+//export default Radium(App);
 export default App;
